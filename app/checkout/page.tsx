@@ -30,8 +30,11 @@ export default function CheckoutPage() {
   // -----------------------------
   // 1. Auth + Guest Check + Load Address
   // -----------------------------
+  const hasInitialized = React.useRef(false);
+
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined' || hasInitialized.current) return;
+    hasInitialized.current = true;
 
     const init = async () => {
       initAuth();
@@ -44,8 +47,8 @@ export default function CheckoutPage() {
           const user = JSON.parse(userStr);
           if (user.name === 'Guest User' || user.email?.startsWith('guest')) {
             console.log('Clearing legacy guest account');
-            clearAuth(); 
-            router.replace('/'); // Redirect بدل reload كامل
+            clearAuth();
+            router.replace('/');
             return;
           }
         } catch (e) {
@@ -65,7 +68,7 @@ export default function CheckoutPage() {
     };
 
     init();
-  }, [initAuth, clearAuth, router]);
+  }, []); // Empty dependencies - only run once
 
   // -----------------------------
   // 2. Persist Address Changes
