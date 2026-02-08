@@ -51,7 +51,8 @@ export default function CheckoutPage() {
     };
 
     init();
-  }, [initAuth]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Run only once on mount
 
   // -----------------------------
   // 2. Persist Address Changes
