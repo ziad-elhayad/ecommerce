@@ -15,12 +15,13 @@ export function Providers({ children }: { children: React.ReactNode }) {
     if (initAuth) {
       initAuth();
     }
-    
+
     // Initialize cart state (handled by zustand persist middleware)
     if (initCart) {
       initCart();
     }
-  }, [initAuth, initCart]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Run only once on mount
 
   return <>{children}</>;
 }
