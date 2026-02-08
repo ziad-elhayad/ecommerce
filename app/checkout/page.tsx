@@ -28,7 +28,7 @@ export default function CheckoutPage() {
   });
 
   // -----------------------------
-  // 1. Auth + Guest Check + Load Address
+  // 1. Auth + Load Address
   // -----------------------------
   const hasInitialized = React.useRef(false);
 
@@ -39,22 +39,6 @@ export default function CheckoutPage() {
     const init = async () => {
       initAuth();
       setCheckingAuth(false);
-
-      // تحقق من المستخدم القديم Guest
-      const userStr = localStorage.getItem('user');
-      if (userStr) {
-        try {
-          const user = JSON.parse(userStr);
-          if (user.name === 'Guest User' || user.email?.startsWith('guest')) {
-            console.log('Clearing legacy guest account');
-            clearAuth();
-            router.replace('/');
-            return;
-          }
-        } catch (e) {
-          console.error('Failed to parse user from localStorage', e);
-        }
-      }
 
       // تحميل عنوان الشحن المحفوظ
       const savedAddress = localStorage.getItem('checkout_address');
