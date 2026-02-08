@@ -25,7 +25,7 @@ interface Order {
   updatedAt: string;
 }
 
-function OrdersContent() {
+export default function OrdersPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { isAuthenticated } = useAuthStore();

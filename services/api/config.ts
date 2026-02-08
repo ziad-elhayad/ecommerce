@@ -40,7 +40,7 @@ apiClient.interceptors.response.use(
       console.warn('Unauthorized access (401). Clearing token.');
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      // window.location.reload(); // Removed to prevent infinite loop
+      window.location.reload();
     }
     return Promise.reject(error);
   }

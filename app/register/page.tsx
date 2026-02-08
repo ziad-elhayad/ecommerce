@@ -9,7 +9,7 @@ import { authApi } from '@/services/api';
 import { useAuthStore } from '@/hooks/useAuthStore';
 import { Button, Input, Card } from '@/components/ui';
 
-function RegisterContent() {
+export default function RegisterPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const setAuth = useAuthStore((s) => s.setAuth);
