@@ -2,7 +2,7 @@
 
 'use client';
 
-import React, { useState, Suspense } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { authApi } from '@/services/api';
@@ -179,13 +179,5 @@ export default function RegisterPage() {
         </Card>
       </div>
     </div>
-  );
-}
-
-export default function RegisterPage() {
-  return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
-      <RegisterContent />
-    </Suspense>
   );
 }

@@ -58,9 +58,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   };
 
   // Safe access to category name
-  const categoryName = (product.category as any)?.name || (product.category as any) || 'Category';
-  const productImage = product.imageCover || (product as any).image || (product.images && product.images[0]);
-  const productId = product._id || product.id || '';
+  const categoryName = typeof product.category === 'object' ? product.category.name : product.category;
+  const productImage = product.imageCover || product.image || (product.images && product.images[0]);
+  const productId = product._id || product.id;
   const priceEGP = product.price;
 
   // Render
@@ -97,7 +97,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <div className="flex items-center gap-1 mb-3">
             <FaStar className="text-yellow-400 text-sm" />
             <span className="text-sm font-medium text-gray-700">
-              {product.ratingsAverage?.toFixed(1) || (product as any).rating?.rate?.toFixed(1) || 'N/A'}
+              {product.ratingsAverage?.toFixed(1) || product.rating?.rate?.toFixed(1) || 'N/A'}
             </span>
           </div>
 
