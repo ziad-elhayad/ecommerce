@@ -2,14 +2,14 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { authApi } from '@/services/api';
 import { useAuthStore } from '@/hooks/useAuthStore';
 import { Button, Input, Card } from '@/components/ui';
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const setAuth = useAuthStore((state) => state.setAuth);
@@ -30,9 +30,9 @@ export default function LoginPage() {
     try {
       console.log('Submitting login form...');
       const response = await authApi.login(formData);
-      
+
       console.log('Login successful:', response);
-      
+
       if (response.token) {
         setAuth(response.user || { email: formData.email } as any, response.token);
         router.push(callbackUrl);
@@ -154,5 +154,13 @@ export default function LoginPage() {
         </Card>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <LoginContent />
+    </Suspense>
   );
 }

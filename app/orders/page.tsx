@@ -2,7 +2,7 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuthStore } from '@/hooks/useAuthStore';
 import { ordersApi } from '@/services/api';
@@ -25,7 +25,7 @@ interface Order {
   updatedAt: string;
 }
 
-export default function OrdersPage() {
+function OrdersContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { isAuthenticated } = useAuthStore();
@@ -44,10 +44,10 @@ export default function OrdersPage() {
       try {
         setLoading(true);
         setError(null);
-        
+
         console.log('Fetching orders...');
         const data = await ordersApi.getUserOrders();
-        
+
         console.log('Orders received:', data);
         setOrders(data || []);
       } catch (err: any) {
@@ -109,14 +109,14 @@ export default function OrdersPage() {
                 <li>The orders API requires additional authentication</li>
               </ul>
               <div className="mt-4 flex gap-3">
-                <Button 
-                  size="sm" 
+                <Button
+                  size="sm"
                   onClick={() => window.location.reload()}
                 >
                   Try Again
                 </Button>
-                <Button 
-                  size="sm" 
+                <Button
+                  size="sm"
                   variant="outline"
                   onClick={() => router.push('/products')}
                 >
@@ -229,5 +229,19 @@ export default function OrdersPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function OrdersPage() {
+  return (
+    <Suspense fallback={
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="flex justify-center py-20">
+          <Loading size="lg" text="Loading orders..." />
+        </div>
+      </div>
+    }>
+      <OrdersContent />
+    </Suspense>
   );
 }

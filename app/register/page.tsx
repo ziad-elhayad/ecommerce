@@ -2,14 +2,14 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { authApi } from '@/services/api';
 import { useAuthStore } from '@/hooks/useAuthStore';
 import { Button, Input, Card } from '@/components/ui';
 
-export default function RegisterPage() {
+function RegisterContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const setAuth = useAuthStore((s) => s.setAuth);
@@ -55,7 +55,7 @@ export default function RegisterPage() {
         phone: phoneDigits.length === 11 ? phoneDigits : formData.phone.trim(),
       };
       const response = await authApi.register(payload);
-      
+
       if (response.token) {
         const user = response.user ?? { email: formData.email, name: formData.name } as any;
         setAuth(user, response.token);
@@ -179,5 +179,13 @@ export default function RegisterPage() {
         </Card>
       </div>
     </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <RegisterContent />
+    </Suspense>
   );
 }

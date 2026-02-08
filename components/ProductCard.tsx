@@ -22,28 +22,15 @@ interface ProductCardProps {
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const router = useRouter();
   const addItem = useCartStore((state) => state.addItem);
-  const { isInWishlist, addItem: addToWishlist, removeItem } = useWishlistStore();
+  const [isAdding, setIsAdding] = React.useState(false);
+  const { isInWishlist, addItem: addToStore, removeItem: removeFromStore } = useWishlistStore();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const hydrated = useHydration();
 
-  const [isAdding, setIsAdding] = React.useState(false);
+  // ... (handlers remain same)
 
-  // ===== SAFE DATA =====
-  const productId = product._id || product.id;
-  const categoryName =
-    typeof product.category === 'object'
-      ? product.category?.name
-      : product.category;
-
-  const productImage =
-    product.imageCover || product.image || product.images?.[0];
-
-  const priceEGP = product.price ?? 0;
-
-  // ===== HANDLERS =====
   const toggleWishlist = async () => {
-    if (!productId) return;
-
+    // ... same logic
     if (!isAuthenticated) {
       router.push('/login');
       return;
@@ -51,10 +38,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
     try {
       if (isInWishlist(productId)) {
-        removeItem(productId);
+        removeFromStore(productId);
         await wishlistApi.removeFromWishlist(productId);
       } else {
-        addToWishlist(productId);
+        addToStore(productId);
         await wishlistApi.addToWishlist(productId);
       }
     } catch (error) {
@@ -62,20 +49,25 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     }
   };
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-
     setIsAdding(true);
     addItem(product as any);
-
     setTimeout(() => setIsAdding(false), 500);
   };
 
+  // Safe access to category name
+  const categoryName = (product.category as any)?.name || (product.category as any) || 'Category';
+  const productImage = product.imageCover || (product as any).image || (product.images && product.images[0]);
+  const productId = product._id || product.id || '';
+  const priceEGP = product.price;
+
+  // Render
   return (
     <Link href={`/products/${productId}`}>
       <Card hover className="h-full flex flex-col">
-        {/* IMAGE */}
+        {/* ... Image & Details ... */}
         <div className="relative w-full aspect-square mb-4 bg-gray-50 rounded-lg overflow-hidden">
           {productImage && (
             <Image
@@ -97,6 +89,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             {product.title}
           </h3>
 
+          {/* ... Description ... */}
           <p className="text-sm text-gray-600 mb-3 line-clamp-2 flex-grow">
             {product.description}
           </p>
@@ -104,38 +97,30 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <div className="flex items-center gap-1 mb-3">
             <FaStar className="text-yellow-400 text-sm" />
             <span className="text-sm font-medium text-gray-700">
-              {product.ratingsAverage?.toFixed(1) ??
-                product.rating?.rate?.toFixed(1) ??
-                'N/A'}
+              {product.ratingsAverage?.toFixed(1) || (product as any).rating?.rate?.toFixed(1) || 'N/A'}
             </span>
           </div>
 
-          <span className="text-2xl font-bold text-primary-600 mb-3">
-            {priceEGP.toFixed(2)} EGP
-          </span>
+          <div className="flex flex-col">
+            <span className="text-2xl font-bold text-primary-600">
+              {priceEGP.toFixed(2)} EGP
+            </span>
+          </div>
 
           <div className="flex gap-2">
+            {/* Only render heart icon logic after hydration to avoid mismatch */}
             <Button
               variant="outline"
               size="sm"
-              className={`p-2 ${
-                hydrated && isInWishlist(productId)
-                  ? 'text-red-500 border-red-200 bg-red-50'
-                  : 'text-gray-400'
-              }`}
+              className={`p-2 ${hydrated && isInWishlist(productId) ? 'text-red-500 border-red-200 bg-red-50' : 'text-gray-400'}`}
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 toggleWishlist();
               }}
             >
-              <FaHeart
-                className={
-                  hydrated && isInWishlist(productId) ? 'fill-current' : ''
-                }
-              />
+              <FaHeart className={hydrated && isInWishlist(productId) ? 'fill-current' : ''} />
             </Button>
-
             <Button
               variant="primary"
               size="sm"
