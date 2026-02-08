@@ -30,11 +30,11 @@ class ApiClient {
     this.client.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
         const token = storageService.getAccessToken();
-        
+
         if (token && config.headers) {
           config.headers.token = token;
         }
-        
+
         return config;
       },
       (error: AxiosError) => {
@@ -110,9 +110,10 @@ class ApiClient {
   private handleLogout(): void {
     storageService.clearTokens();
     storageService.clearUser();
-    
+
     if (typeof window !== 'undefined') {
-      window.location.href = '/login?session=expired';
+      console.warn('Session expired. Please login again.');
+      // window.location.href = '/login?session=expired'; // Removed to prevent infinite loop
     }
   }
 
