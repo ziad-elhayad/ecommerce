@@ -30,33 +30,28 @@ export default function CheckoutPage() {
   // -----------------------------
   // 1. Auth + Load Address
   // -----------------------------
-  const hasInitialized = React.useRef(false);
-
   useEffect(() => {
-    console.log('[CHECKOUT] useEffect triggered', { hasInitialized: hasInitialized.current, window: typeof window });
-    if (typeof window === 'undefined' || hasInitialized.current) return;
-    hasInitialized.current = true;
-    console.log('[CHECKOUT] Initializing...');
+    if (typeof window === 'undefined') return;
 
-    const init = async () => {
+    // Only run once when component mounts
+    const init = () => {
       initAuth();
-      setCheckingAuth(false);
-      console.log('[CHECKOUT] Auth initialized');
 
       // تحميل عنوان الشحن المحفوظ
       const savedAddress = localStorage.getItem('checkout_address');
       if (savedAddress) {
         try {
           setShippingAddress(JSON.parse(savedAddress));
-          console.log('[CHECKOUT] Loaded saved address');
         } catch (e) {
           console.error('Failed to parse saved address', e);
         }
       }
+
+      setCheckingAuth(false);
     };
 
     init();
-  }, []); // Empty dependencies - only run once
+  }, [initAuth]);
 
   // -----------------------------
   // 2. Persist Address Changes
