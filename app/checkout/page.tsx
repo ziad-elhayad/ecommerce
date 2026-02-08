@@ -132,7 +132,8 @@ export default function CheckoutPage() {
     if (checkingAuth) return;
 
     // Only load cart if user is authenticated
-    if (!isAuthenticated) {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    if (!token) {
       setCartLoading(false);
       return;
     }
@@ -146,7 +147,7 @@ export default function CheckoutPage() {
     };
 
     initCart();
-  }, [checkingAuth, isAuthenticated]);
+  }, [checkingAuth]); // Only depend on checkingAuth, not isAuthenticated
 
   // -----------------------------
   // 5. Form Handlers
