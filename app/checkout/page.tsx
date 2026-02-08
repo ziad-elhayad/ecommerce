@@ -12,6 +12,7 @@ const CHECKOUT_CALLBACK = '/login?callbackUrl=/checkout';
 export default function CheckoutPage() {
   const router = useRouter();
   const initAuth = useAuthStore((state) => state.initAuth);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const setAuth = useAuthStore((state) => state.setAuth);
   const clearAuth = useAuthStore((state) => state.clearAuth);
   const { items, getTotalPrice, clearCart } = useCartStore();
@@ -130,6 +131,12 @@ export default function CheckoutPage() {
   useEffect(() => {
     if (checkingAuth) return;
 
+    // Only load cart if user is authenticated
+    if (!isAuthenticated) {
+      setCartLoading(false);
+      return;
+    }
+
     const initCart = async () => {
       setCartLoading(true);
       const { id } = await ensureCartId();
@@ -139,7 +146,7 @@ export default function CheckoutPage() {
     };
 
     initCart();
-  }, [checkingAuth]);
+  }, [checkingAuth, isAuthenticated]);
 
   // -----------------------------
   // 5. Form Handlers
