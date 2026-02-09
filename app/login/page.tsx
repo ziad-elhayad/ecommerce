@@ -130,15 +130,7 @@ function LoginContent() {
             </div>
           </form>
 
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <p className="text-sm text-gray-600 text-center mb-3">
-              Demo Account (for testing):
-            </p>
-            {/* <div className="bg-gray-50 p-3 rounded-lg text-sm text-gray-700">
-              <p><strong>Email:</strong> test@example.com</p>
-              <p><strong>Password:</strong> Test123456</p>
-            </div> */}
-          </div>
+   
         </Card>
       </div>
     </div>
