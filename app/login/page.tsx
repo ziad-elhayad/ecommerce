@@ -134,10 +134,10 @@ function LoginContent() {
             <p className="text-sm text-gray-600 text-center mb-3">
               Demo Account (for testing):
             </p>
-            <div className="bg-gray-50 p-3 rounded-lg text-sm text-gray-700">
+            {/* <div className="bg-gray-50 p-3 rounded-lg text-sm text-gray-700">
               <p><strong>Email:</strong> test@example.com</p>
               <p><strong>Password:</strong> Test123456</p>
-            </div>
+            </div> */}
           </div>
         </Card>
       </div>
