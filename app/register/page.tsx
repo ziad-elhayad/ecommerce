@@ -7,9 +7,10 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { authApi } from '@/services/api';
 import { useAuthStore } from '@/hooks/useAuthStore';
-import { Button, Input, Card } from '@/_components/ui';
+import { Button, Input, Card, Loading } from '@/_components/ui';
+import { Suspense } from 'react';
 
-export default function RegisterPage() {
+function RegisterContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const setAuth = useAuthStore((s) => s.setAuth);
@@ -39,7 +40,7 @@ export default function RegisterPage() {
       return;
     }
 
-    // Phone: 11 digits, optionally starting with 0 (Egyptian format)
+    // Phone: 11 digits, Egyptian format
     const phoneDigits = formData.phone.replace(/\D/g, '');
     if (phoneDigits.length !== 11) {
       setError('phone number must be egyption');
@@ -49,10 +50,9 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      const phoneDigits = formData.phone.replace(/\D/g, '');
       const payload = {
         ...formData,
-        phone: phoneDigits.length === 11 ? phoneDigits : formData.phone.trim(),
+        phone: phoneDigits,
       };
       const response = await authApi.register(payload);
 
@@ -67,7 +67,6 @@ export default function RegisterPage() {
         router.push(redirect);
       }
     } catch (err: any) {
-      console.error('Registration error:', err);
       setError(err.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
@@ -105,7 +104,6 @@ export default function RegisterPage() {
               onChange={handleChange}
               required
               placeholder="John Doe"
-              autoComplete="name"
             />
 
             <Input
@@ -116,7 +114,6 @@ export default function RegisterPage() {
               onChange={handleChange}
               required
               placeholder="john@example.com"
-              autoComplete="email"
             />
 
             <Input
@@ -127,9 +124,8 @@ export default function RegisterPage() {
               onChange={handleChange}
               required
               placeholder="01012345678"
-              helperText="Egyptian phone number (11 digits, starts with 010/011/012/015)"
+              helperText="Egyptian phone number (11 digits)"
               maxLength={11}
-              autoComplete="tel"
             />
 
             <Input
@@ -141,7 +137,6 @@ export default function RegisterPage() {
               required
               placeholder="••••••••"
               helperText="At least 6 characters"
-              autoComplete="new-password"
             />
 
             <Input
@@ -152,7 +147,6 @@ export default function RegisterPage() {
               onChange={handleChange}
               required
               placeholder="••••••••"
-              autoComplete="new-password"
             />
 
             <Button type="submit" fullWidth loading={loading}>
@@ -170,7 +164,6 @@ export default function RegisterPage() {
             </div>
           </form>
 
-          {/* Tips */}
           <div className="mt-6 pt-6 border-t border-gray-200">
             <p className="text-xs text-gray-600 text-center">
               By creating an account, you agree to our Terms of Service and Privacy Policy
@@ -179,5 +172,17 @@ export default function RegisterPage() {
         </Card>
       </div>
     </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <Loading size="lg" text="Loading registration..." />
+      </div>
+    }>
+      <RegisterContent />
+    </Suspense>
   );
 }

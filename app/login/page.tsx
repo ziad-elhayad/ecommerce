@@ -7,9 +7,10 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { authApi } from '@/services/api';
 import { useAuthStore } from '@/hooks/useAuthStore';
-import { Button, Input, Card } from '@/_components/ui';
+import { Button, Input, Card, Loading } from '@/_components/ui';
+import { Suspense } from 'react';
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const setAuth = useAuthStore((state) => state.setAuth);
@@ -28,11 +29,7 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      console.log('Submitting login form...');
       const response = await authApi.login(formData);
-
-      console.log('Login successful:', response);
-
       if (response.token) {
         setAuth(response.user || { email: formData.email } as any, response.token);
         router.push(callbackUrl);
@@ -40,7 +37,6 @@ export default function LoginPage() {
         setError('Login failed. No token received.');
       }
     } catch (err: any) {
-      console.error('Login error:', err);
       setError(err.message || 'Login failed. Please try again.');
     } finally {
       setLoading(false);
@@ -48,7 +44,6 @@ export default function LoginPage() {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Don't clear error on input change - only on form submit or manual dismiss
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -81,7 +76,6 @@ export default function LoginPage() {
                   type="button"
                   onClick={dismissError}
                   className="absolute top-2 right-2 text-red-700 hover:text-red-900"
-                  aria-label="Dismiss error"
                 >
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -99,7 +93,6 @@ export default function LoginPage() {
               onChange={handleChange}
               required
               placeholder="your@email.com"
-              autoComplete="email"
             />
 
             <Input
@@ -110,7 +103,6 @@ export default function LoginPage() {
               onChange={handleChange}
               required
               placeholder="••••••••"
-              autoComplete="current-password"
             />
 
             <div className="flex items-center justify-between text-sm">
@@ -118,7 +110,7 @@ export default function LoginPage() {
                 <input type="checkbox" className="mr-2" />
                 <span className="text-gray-600">Remember me</span>
               </label>
-              <Link href="/forgot-password" className="text-primary-600 hover:text-primary-700">
+              <Link href="/forgot-password" disable-nprogress="true" className="text-primary-600 hover:text-primary-700">
                 Forgot password?
               </Link>
             </div>
@@ -138,7 +130,6 @@ export default function LoginPage() {
             </div>
           </form>
 
-          {/* Demo Credentials */}
           <div className="mt-6 pt-6 border-t border-gray-200">
             <p className="text-sm text-gray-600 text-center mb-3">
               Demo Account (for testing):
@@ -146,13 +137,22 @@ export default function LoginPage() {
             <div className="bg-gray-50 p-3 rounded-lg text-sm text-gray-700">
               <p><strong>Email:</strong> test@example.com</p>
               <p><strong>Password:</strong> Test123456</p>
-              <p className="text-xs text-gray-500 mt-2">
-                Note: Use your own registered account or create a new one
-              </p>
             </div>
           </div>
         </Card>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <Loading size="lg" text="Loading login..." />
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   );
 }
