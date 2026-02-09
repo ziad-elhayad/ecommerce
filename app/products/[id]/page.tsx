@@ -242,14 +242,14 @@ export default function ProductDetailPage() {
               <FaShoppingCart />
               Add to Cart
             </Button>
-            <Button
+            {/* <Button
               variant="outline"
               size="lg"
               className="gap-2"
             >
               <FaHeart />
               Wishlist
-            </Button>
+            </Button> */}
           </div>
 
           {/* Additional Info */}
