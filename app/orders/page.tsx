@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuthStore } from '@/hooks/useAuthStore';
 import { ordersApi } from '@/services/api';
-import { Card, Loading, Button } from '@/components/ui';
+import { Card, Loading, Button } from '@/_components/ui';
 import { FaCheckCircle, FaTruck, FaClock, FaBox } from 'react-icons/fa';
 
 interface Order {

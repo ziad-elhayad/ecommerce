@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/hooks/useAuthStore';
 import { useCartStore } from '@/hooks/useCartStore';
 import { ordersApi, cartApi } from '@/services/api';
-import { Button, Input, Card, Loading } from '@/components/ui';
+import { Button, Input, Card, Loading } from '@/_components/ui';
 
 const CHECKOUT_CALLBACK = '/login?callbackUrl=/checkout';
 

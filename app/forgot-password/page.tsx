@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { authApi } from '@/services/api';
-import { Button, Input, Card } from '@/components/ui';
+import { Button, Input, Card } from '@/_components/ui';
 
 export default function ForgotPasswordPage() {
   const router = useRouter();

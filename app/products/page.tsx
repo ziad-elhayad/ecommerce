@@ -5,8 +5,8 @@
 import React, { useEffect, useState } from 'react';
 import { productsApi } from '@/services/api';
 import { Product } from '@/types';
-import { ProductCard } from '@/components/ProductCard';
-import { Loading, Button } from '@/components/ui';
+import { ProductCard } from '@/_components/ProductCard';
+import { Loading, Button } from '@/_components/ui';
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);

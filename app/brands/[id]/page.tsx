@@ -6,8 +6,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { productsApi, brandsApi } from '@/services/api';
 import { Product } from '@/types';
-import { ProductCard } from '@/components/ProductCard';
-import { Loading, Button } from '@/components/ui';
+import { ProductCard } from '@/_components/ProductCard';
+import { Loading, Button } from '@/_components/ui';
 import { FaArrowLeft } from 'react-icons/fa';
 
 export default function BrandProductsPage() {
@@ -22,11 +22,11 @@ export default function BrandProductsPage() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        
+
         // Get brand details
         const brand = await brandsApi.getById(params.id as string);
         setBrandName(brand?.name ?? 'Brand');
-        
+
         // Get all products and filter by brand
         const allProducts = await productsApi.getAll();
         const brandProducts = allProducts.filter(

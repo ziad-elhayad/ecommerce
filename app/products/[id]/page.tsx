@@ -7,7 +7,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { productsApi } from '@/services/api';
 import { Product } from '@/types';
-import { Button, Card, Loading } from '@/components/ui';
+import { Button, Card, Loading } from '@/_components/ui';
 import { useCartStore } from '@/hooks/useCartStore';
 import { FaStar, FaShoppingCart, FaArrowLeft, FaHeart } from 'react-icons/fa';
 
@@ -27,13 +27,13 @@ export default function ProductDetailPage() {
       try {
         setLoading(true);
         setError(null);
-        
+
         const productId = params.id as string;
         console.log('Fetching product with ID:', productId);
-        
+
         const data = await productsApi.getById(productId);
         console.log('Product data received:', data);
-        
+
         setProduct(data);
       } catch (err: any) {
         console.error('Error fetching product:', err);
@@ -50,12 +50,12 @@ export default function ProductDetailPage() {
 
   const handleAddToCart = () => {
     if (!product) return;
-    
+
     setIsAdding(true);
     for (let i = 0; i < quantity; i++) {
       addItem(product as any);
     }
-    
+
     // Redirect to checkout after adding to cart
     setTimeout(() => {
       setIsAdding(false);
@@ -87,14 +87,14 @@ export default function ProductDetailPage() {
     );
   }
 
-  const images = product.images && product.images.length > 0 
-    ? product.images 
-    : product.imageCover 
-    ? [product.imageCover] 
-    : [];
+  const images = product.images && product.images.length > 0
+    ? product.images
+    : product.imageCover
+      ? [product.imageCover]
+      : [];
 
-  const categoryName = typeof product.category === 'object' 
-    ? product.category.name 
+  const categoryName = typeof product.category === 'object'
+    ? product.category.name
     : product.category;
 
   return (
@@ -121,7 +121,7 @@ export default function ProductDetailPage() {
               priority
             />
           </div>
-          
+
           {/* Thumbnail Images */}
           {images.length > 1 && (
             <div className="grid grid-cols-4 gap-4">
@@ -129,11 +129,10 @@ export default function ProductDetailPage() {
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
-                  className={`relative aspect-square bg-gray-50 rounded-lg overflow-hidden border-2 transition-all ${
-                    selectedImage === index
+                  className={`relative aspect-square bg-gray-50 rounded-lg overflow-hidden border-2 transition-all ${selectedImage === index
                       ? 'border-primary-600'
                       : 'border-transparent hover:border-gray-300'
-                  }`}
+                    }`}
                 >
                   <Image
                     src={img}
@@ -157,7 +156,7 @@ export default function ProductDetailPage() {
             <h1 className="text-3xl font-bold text-gray-900 mb-4">
               {product.title}
             </h1>
-            
+
             {/* Rating */}
             <div className="flex items-center gap-2 mb-4">
               <div className="flex items-center gap-1">

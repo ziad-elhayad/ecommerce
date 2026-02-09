@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { authApi } from '@/services/api';
 import { useAuthStore } from '@/hooks/useAuthStore';
-import { Button, Input, Card } from '@/components/ui';
+import { Button, Input, Card } from '@/_components/ui';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -42,7 +42,7 @@ export default function RegisterPage() {
     // Phone: 11 digits, optionally starting with 0 (Egyptian format)
     const phoneDigits = formData.phone.replace(/\D/g, '');
     if (phoneDigits.length !== 11) {
-      setError('رقم الهاتف يجب أن يكون 11 رقماً (مثال: 01012345678)');
+      setError('phone number must be egyption');
       return;
     }
 

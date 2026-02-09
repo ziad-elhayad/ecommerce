@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { authApi } from '@/services/api';
 import { useAuthStore } from '@/hooks/useAuthStore';
-import { Button, Input, Card } from '@/components/ui';
+import { Button, Input, Card } from '@/_components/ui';
 
 export default function LoginPage() {
   const router = useRouter();

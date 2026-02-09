@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useWishlistStore } from '@/lib/store/wishlistStore';
 import { productsApi } from '@/services/api/products';
-import { Button, Card, Loading } from '@/components/ui';
+import { Button, Card, Loading } from '@/_components/ui';
 import { FaHeart, FaShoppingCart, FaTrash } from 'react-icons/fa';
 import { useCartStore } from '@/hooks/useCartStore';
 

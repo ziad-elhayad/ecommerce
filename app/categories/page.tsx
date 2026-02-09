@@ -7,7 +7,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { productsApi } from '@/services/api';
 import type { CategoryDetailed } from '@/services/api/products';
-import { Card, Loading } from '@/components/ui';
+import { Card, Loading } from '@/_components/ui';
 import { FaArrowRight } from 'react-icons/fa';
 
 export default function CategoriesPage() {

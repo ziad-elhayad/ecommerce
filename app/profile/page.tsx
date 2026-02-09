@@ -6,7 +6,7 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/hooks/useAuthStore';
 import { useCartStore } from '@/hooks/useCartStore';
-import { Card, Button } from '@/components/ui';
+import { Card, Button } from '@/_components/ui';
 import { FaUser, FaEnvelope, FaMapMarkerAlt, FaPhone, FaShoppingBag } from 'react-icons/fa';
 
 export default function ProfilePage() {

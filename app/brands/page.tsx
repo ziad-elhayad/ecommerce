@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { brandsApi } from '@/services/api';
-import { Card, Loading } from '@/components/ui';
+import { Card, Loading } from '@/_components/ui';
 
 interface Brand {
   _id: string;
@@ -66,8 +66,8 @@ export default function BrandsPage() {
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
         {brands.map((brand) => (
-          <Link 
-            key={brand._id} 
+          <Link
+            key={brand._id}
             href={`/brands/${brand._id}`}
             className="group"
           >

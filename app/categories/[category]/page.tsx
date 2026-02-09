@@ -7,11 +7,11 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { productsApi } from '@/services/api';
 import { Product } from '@/types';
-import { ProductCard } from '@/components/ProductCard';
-import { Loading, Button } from '@/components/ui';
+import { ProductCard } from '@/_components/ProductCard';
+import { Loading, Button } from '@/_components/ui';
 import { FaArrowLeft } from 'react-icons/fa';
 
-/** MongoDB ObjectId is 24 hex chars */
+
 function isMongoId(value: string): boolean {
   return /^[a-fA-F0-9]{24}$/.test(value);
 }

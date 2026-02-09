@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useCartStore } from '@/hooks/useCartStore';
 import { useAuthStore } from '@/hooks/useAuthStore';
-import { Button, Card } from '@/components/ui';
+import { Button, Card } from '@/_components/ui';
 import { FaTrash, FaShoppingCart, FaMinus, FaPlus } from 'react-icons/fa';
 
 export default function CartPage() {
