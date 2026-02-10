@@ -84,28 +84,28 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
             Reset Password
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-400">
             {step === 'email' && 'Enter your email to receive a reset code'}
             {step === 'code' && 'Enter the code sent to your email'}
             {step === 'newPassword' && 'Enter your new password'}
           </p>
         </div>
 
-        <Card>
+        <Card className="p-8 shadow-xl">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg mb-6 text-sm">
               {error}
             </div>
           )}
 
           {success && (
-            <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-4">
+            <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 px-4 py-3 rounded-lg mb-6 text-sm">
               {success}
             </div>
           )}
@@ -114,21 +114,21 @@ export default function ForgotPasswordPage() {
           {step === 'email' && (
             <form onSubmit={handleSendResetCode} className="space-y-6">
               <Input
-                label="Email"
+                label="Email Address"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                placeholder="Enter your email"
+                placeholder="name@example.com"
               />
 
-              <Button type="submit" fullWidth loading={loading}>
-                Send Code
+              <Button type="submit" fullWidth loading={loading} className="h-12 text-lg">
+                Send Reset Code
               </Button>
 
-              <div className="text-center text-sm text-gray-600">
+              <div className="text-center text-sm text-gray-600 dark:text-gray-400 mt-6">
                 Remember your password?{' '}
-                <Link href="/login" className="text-primary-600 hover:text-primary-700 font-medium">
+                <Link href="/login" className="text-primary-600 dark:text-primary-500 font-semibold hover:underline">
                   Sign in
                 </Link>
               </div>
@@ -148,16 +148,16 @@ export default function ForgotPasswordPage() {
                 maxLength={6}
               />
 
-              <Button type="submit" fullWidth loading={loading}>
+              <Button type="submit" fullWidth loading={loading} className="h-12 text-lg">
                 Verify Code
               </Button>
 
               <button
                 type="button"
                 onClick={() => setStep('email')}
-                className="w-full text-sm text-gray-600 hover:text-primary-600"
+                className="w-full text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-500 font-medium transition-colors"
               >
-                Back
+                Back to email
               </button>
             </form>
           )}
@@ -184,8 +184,8 @@ export default function ForgotPasswordPage() {
                 placeholder="••••••••"
               />
 
-              <Button type="submit" fullWidth loading={loading}>
-                Change Password
+              <Button type="submit" fullWidth loading={loading} className="h-12 text-lg">
+                Update Password
               </Button>
             </form>
           )}

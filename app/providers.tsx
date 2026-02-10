@@ -1,8 +1,7 @@
-// app/providers.tsx
-
 'use client';
 
 import { useEffect } from 'react';
+import { ThemeProvider } from 'next-themes';
 import { useAuthStore } from '@/hooks/useAuthStore';
 import { useCartStore } from '@/hooks/useCartStore';
 
@@ -23,5 +22,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Run only once on mount
 
-  return <>{children}</>;
+  return (
+    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+      {children}
+    </ThemeProvider>
+  );
 }

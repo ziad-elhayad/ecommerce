@@ -68,7 +68,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     <Link href={`/products/${productId}`}>
       <Card hover className="h-full flex flex-col">
         {/* ... Image & Details ... */}
-        <div className="relative w-full aspect-square mb-4 bg-gray-50 rounded-lg overflow-hidden">
+        <div className="relative w-full aspect-square mb-4 bg-gray-50 dark:bg-gray-800 rounded-lg overflow-hidden">
           {productImage && (
             <Image
               src={productImage}
@@ -81,22 +81,22 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </div>
 
         <div className="flex flex-col flex-grow">
-          <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+          <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">
             {categoryName}
           </p>
 
-          <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 min-h-[3rem]">
+          <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2 line-clamp-2 min-h-[3rem]">
             {product.title}
           </h3>
 
           {/* ... Description ... */}
-          <p className="text-sm text-gray-600 mb-3 line-clamp-2 flex-grow">
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2 flex-grow">
             {product.description}
           </p>
 
           <div className="flex items-center gap-1 mb-3">
             <FaStar className="text-yellow-400 text-sm" />
-            <span className="text-sm font-medium text-gray-700">
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
               {product.ratingsAverage?.toFixed(1) || 'N/A'}
             </span>
           </div>
@@ -112,7 +112,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             <Button
               variant="outline"
               size="sm"
-              className={`p-2 ${hydrated && isInWishlist(productId) ? 'text-red-500 border-red-200 bg-red-50' : 'text-gray-400'}`}
+              className={`p-2 transition-colors ${hydrated && isInWishlist(productId) ? 'text-red-500 border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-900/50' : 'text-gray-400 dark:text-gray-500 dark:border-gray-700'}`}
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();

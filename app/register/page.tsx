@@ -81,17 +81,17 @@ function RegisterContent() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Account</h1>
-          <p className="text-gray-600">Sign up to start shopping</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Create Account</h1>
+          <p className="text-gray-600 dark:text-gray-400">Sign up to start shopping</p>
         </div>
 
-        <Card>
+        <Card className="p-8 shadow-xl">
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg text-sm">
                 {error}
               </div>
             )}
@@ -149,24 +149,25 @@ function RegisterContent() {
               placeholder="••••••••"
             />
 
-            <Button type="submit" fullWidth loading={loading}>
+            <Button type="submit" fullWidth loading={loading} className="h-12 text-lg">
               Create Account
             </Button>
 
-            <div className="text-center text-sm text-gray-600">
+            <div className="text-center text-sm text-gray-600 dark:text-gray-400 mt-6">
               Already have an account?{' '}
               <Link
                 href={callbackUrl ? `/login?callbackUrl=${encodeURIComponent(callbackUrl)}` : '/login'}
-                className="text-primary-600 hover:text-primary-700 font-medium"
+                className="text-primary-600 hover:text-primary-500 font-semibold transition-colors"
               >
                 Sign in
               </Link>
             </div>
           </form>
 
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <p className="text-xs text-gray-600 text-center">
-              By creating an account, you agree to our Terms of Service and Privacy Policy
+          <div className="mt-8 pt-8 border-t border-gray-100 dark:border-gray-800">
+            <p className="text-xs text-gray-500 dark:text-gray-500 text-center leading-relaxed">
+              By creating an account, you agree to our <br />
+              <Link href="#" className="hover:underline">Terms of Service</Link> and <Link href="#" className="hover:underline">Privacy Policy</Link>
             </p>
           </div>
         </Card>
@@ -178,7 +179,7 @@ function RegisterContent() {
 export default function RegisterPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
         <Loading size="lg" text="Loading registration..." />
       </div>
     }>

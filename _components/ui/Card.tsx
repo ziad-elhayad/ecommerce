@@ -21,12 +21,12 @@ export const Card: React.FC<CardProps> = ({
     md: 'p-4',
     lg: 'p-6',
   };
-  
+
   const hoverStyles = hover ? 'hover:shadow-lg transition-shadow duration-200' : '';
-  
+
   return (
     <div
-      className={`bg-white rounded-lg shadow ${paddingStyles[padding]} ${hoverStyles} ${className}`}
+      className={`bg-white dark:bg-gray-900 border border-transparent dark:border-gray-800 rounded-lg shadow-sm ${paddingStyles[padding]} ${hoverStyles} ${className} transition-all duration-300`}
     >
       {children}
     </div>

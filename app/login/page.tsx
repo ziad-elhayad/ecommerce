@@ -1,47 +1,27 @@
-// app/login/page.tsx
-
 'use client';
 
-import React, { useState } from 'react';
-import Link from 'next/link';
+import React, { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { authApi } from '@/services/api';
 import { useAuthStore } from '@/hooks/useAuthStore';
 import { Button, Input, Card, Loading } from '@/_components/ui';
-import { Suspense } from 'react';
+import { FaEnvelope, FaLock, FaSignInAlt } from 'react-icons/fa';
 
 function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const setAuth = useAuthStore((state) => state.setAuth);
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const registered = searchParams.get('registered');
-  const callbackUrl = searchParams.get('callbackUrl') || searchParams.get('redirect') || '/';
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
-
-    try {
-      const response = await authApi.login(formData);
-      if (response.token) {
-        setAuth(response.user || { email: formData.email } as any, response.token);
-        router.push(callbackUrl);
-      } else {
-        setError('Login failed. No token received.');
-      }
-    } catch (err: any) {
-      setError(err.message || 'Login failed. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const redirectPath = searchParams.get('redirect') || '/';
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -50,89 +30,92 @@ function LoginContent() {
     });
   };
 
-  const dismissError = () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
     setError(null);
+
+    try {
+      const response = await authApi.login({ email: formData.email, password: formData.password });
+      if (response.user && response.token) {
+        setAuth(response.user, response.token);
+        router.push(redirectPath);
+      }
+    } catch (err: any) {
+      setError(err.message || 'Login failed. Please check your credentials.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gray-50">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center px-4 py-12 transition-colors duration-300">
+      <Card className="max-w-md w-full p-8 shadow-xl">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
-          <p className="text-gray-600">Sign in to your account</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Welcome Back</h1>
+          <p className="text-gray-600 dark:text-gray-400">Please sign in to your account</p>
         </div>
 
-        <Card>
-          {registered && (
-            <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-4">
-              Registration successful! Please sign in.
-            </div>
-          )}
+        {error && (
+          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 px-4 py-3 rounded-lg mb-6 text-sm">
+            {error}
+          </div>
+        )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg relative">
-                <button
-                  type="button"
-                  onClick={dismissError}
-                  className="absolute top-2 right-2 text-red-700 hover:text-red-900"
-                >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
-                </button>
-                <p className="pr-6">{error}</p>
-              </div>
-            )}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <Input
+            label="Email Address"
+            name="email"
+            type="email"
+            placeholder="name@example.com"
+            required
+            value={formData.email}
+            onChange={handleChange}
+            autoComplete="email"
+          />
 
-            <Input
-              label="Email"
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              placeholder="your@email.com"
-            />
+          <Input
+            label="Password"
+            name="password"
+            type="password"
+            placeholder="••••••••"
+            required
+            value={formData.password}
+            onChange={handleChange}
+            autoComplete="current-password"
+          />
 
-            <Input
-              label="Password"
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              placeholder="••••••••"
-            />
+          <div className="flex items-center justify-end">
+            <Link
+              href="/forgot-password"
+              className="text-sm font-medium text-primary-600 hover:text-primary-500 transition-colors"
+            >
+              Forgot password?
+            </Link>
+          </div>
 
-            <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center">
-                <input type="checkbox" className="mr-2" />
-                <span className="text-gray-600">Remember me</span>
-              </label>
-              <Link href="/forgot-password" disable-nprogress="true" className="text-primary-600 hover:text-primary-700">
-                Forgot password?
-              </Link>
-            </div>
+          <Button
+            type="submit"
+            className="w-full h-12 gap-2 text-lg"
+            loading={loading}
+          >
+            <FaSignInAlt className="text-base" />
+            Sign In
+          </Button>
+        </form>
 
-            <Button type="submit" fullWidth loading={loading}>
-              Sign In
-            </Button>
-
-            <div className="text-center text-sm text-gray-600">
-              Don't have an account?{' '}
-              <Link
-                href={callbackUrl !== '/' ? `/register?callbackUrl=${encodeURIComponent(callbackUrl)}` : '/register'}
-                className="text-primary-600 hover:text-primary-700 font-medium"
-              >
-                Sign up
-              </Link>
-            </div>
-          </form>
-
-   
-        </Card>
-      </div>
+        <div className="mt-8 pt-8 border-t border-gray-100 dark:border-gray-800 text-center">
+          <p className="text-gray-600 dark:text-gray-400">
+            Don't have an account?{' '}
+            <Link
+              href="/register"
+              className="font-semibold text-primary-600 hover:text-primary-500 transition-colors"
+            >
+              Sign Up for free
+            </Link>
+          </p>
+        </div>
+      </Card>
     </div>
   );
 }
@@ -140,7 +123,7 @@ function LoginContent() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
         <Loading size="lg" text="Loading login..." />
       </div>
     }>
